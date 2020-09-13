@@ -1,2 +1,2 @@
 # Databases
-This repository contains projects done for my databases course during my February-June semester of 2020.
+This repository contains a Twitter API Database project related to searching four different concepts on Twitter's database and creating queries related to them. This project was created alongside three classmates and was evaluated as our final evidence for my Database course.
