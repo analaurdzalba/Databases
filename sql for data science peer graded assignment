@@ -1,0 +1,437 @@
+Part 1: Yelp Dataset Profiling and Understanding
+
+1. Profile the data by finding the total number of records for each of the tables below:
+	
+i. Attribute table = 10000
+select count(*)
+from attribute
+
+ii. Business table = 10000
+select count(*)
+from business
+
+iii. Category table = 10000
+select count(*)
+from category
+iv. Checkin table = 10000
+
+v. elite_years table = 10000
+select count(*)
+from elite_years
+vi. friend table = 10000
+select count(*)
+from friend
+vii. hours table = 10000
+select count(*)
+from hours
+viii. photo table = 10000
+select count(*)
+from photo
+ix. review table = 10000
+select count(*)
+from review
+x. tip table = 10000
+select count(*)
+from tip
+xi. user table = 10000
+select count(*)
+from user
+
+
+
+2. Find the total distinct records by either the foreign key or primary key for each table. If two foreign keys are listed in the table, please specify which foreign key.
+
+i. Business = 10000
+select count(distinct id)
+from business
+
+ii. Hours = 1562
+select count(distinct business_id)
+from hours
+
+iii. Category = 2643
+select count(distinct business_id)
+from category
+
+iv. Attribute = 1115
+select count(distinct business_id)
+from attribute
+
+v. Review = 10000
+select count(distinct id)
+from review
+
+vi. Checkin = 493
+select count(distinct business_id)
+from checkin
+
+vii. Photo = 10000
+select count(distinct id)
+from photo
+
+viii. Tip = 537
+select count(distinct user_id)
+from tip
+
+ix. User = 10000
+select count(distinct id)
+from user
+
+x. Friend = 11
+select count(distinct user_id)
+from friend
+
+xi. Elite_years = 2780
+select count(distinct user_id)
+from elite_years
+
+
+Note: Primary Keys are denoted in the ER-Diagram with a yellow key icon.	
+
+
+
+3. Are there any columns with null values in the Users table? Indicate "yes," or "no."
+
+	Answer: no
+	
+	
+	SQL code used to arrive at answer:
+
+SELECT COUNT(*)
+FROM user
+WHERE id IS NULL
+OR name IS NULL
+OR review_count IS NULL
+OR yelping_since IS NULL
+OR useful IS NULL
+OR funny IS NULL
+OR cool IS NULL
+OR fans IS NULL
+OR average_stars IS NULL
+OR compliment_hot IS NULL
+OR compliment_more IS NULL
+OR compliment_profile IS NULL
+OR compliment_cute IS NULL
+OR compliment_list IS NULL
+OR compliment_note IS NULL
+OR compliment_plain IS NULL
+OR compliment_cool IS NULL
+OR compliment_funny IS NULL
+OR compliment_writer IS NULL
+OR compliment_photos IS NULL
+	
+	
+
+4. For each table and column listed below, display the smallest (minimum), largest (maximum), and average (mean) value for the following fields:
+
+	i. Table: Review, Column: Stars
+	
+		min:	1	max: 5 avg: 3.7082
+		
+	
+	ii. Table: Business, Column: Stars
+	
+		min:	1	max:	5	avg: 3.6549
+		
+	
+	iii. Table: Tip, Column: Likes
+	
+		min:	0	max:	2	avg: 0.0144
+		
+	
+	iv. Table: Checkin, Column: Count
+	
+		min:	1	max:	53	avg: 1.9414
+		
+	
+	v. Table: User, Column: Review_count
+	
+		min:	0	max:	2000	avg: 24.2995
+		
+SQL CODE USED FOR EACH: 
+
+SELECT MIN(Column),MAX(Column),AVG(Column)
+FROM table
+
+5. List the cities with the most reviews in descending order:
+
+	SQL code used to arrive at answer:
+	
+SELECT city,SUM(review_count) AS num
+FROM business
+GROUP BY city
+ORDER BY num DESC
+
+	Copy and Paste the Result Below:
+	+-----------------+-------+
+| city            |   num |
++-----------------+-------+
+| Las Vegas       | 82854 |
+| Phoenix         | 34503 |
+| Toronto         | 24113 |
+| Scottsdale      | 20614 |
+| Charlotte       | 12523 |
+| Henderson       | 10871 |
+| Tempe           | 10504 |
+| Pittsburgh      |  9798 |
+| Montréal        |  9448 |
+| Chandler        |  8112 |
+| Mesa            |  6875 |
+| Gilbert         |  6380 |
+| Cleveland       |  5593 |
+| Madison         |  5265 |
+| Glendale        |  4406 |
+| Mississauga     |  3814 |
+| Edinburgh       |  2792 |
+| Peoria          |  2624 |
+| North Las Vegas |  2438 |
+| Markham         |  2352 |
+| Champaign       |  2029 |
+| Stuttgart       |  1849 |
+| Surprise        |  1520 |
+| Lakewood        |  1465 |
+| Goodyear        |  1155 |
++-----------------+-------+
+
+25 OF 362
+
+	
+6. Find the distribution of star ratings to the business in the following cities:
+
+i. Avon
+
+SQL code used to arrive at answer:
+SELECT SUM (review_count) AS Numbers, stars
+FROM business
+WHERE city == "Avon"
+GROUP BY stars
+
+Copy and Paste the Resulting Table Below (2 columns â€“ star rating and count):
++---------+-------+
+| Numbers | stars |
++---------+-------+
+|      10 |   1.5 |
+|       6 |   2.5 |
+|      88 |   3.5 |
+|      21 |   4.0 |
+|      31 |   4.5 |
+|       3 |   5.0 |
++---------+-------+
+
+ii. Beachwood
+
+SQL code used to arrive at answer:
+SELECT SUM (review_count) AS Numbers, stars
+FROM business
+WHERE city == "Beachwood"
+GROUP BY stars
+
+Copy and Paste the Resulting Table Below (2 columns â€“ star rating and count):											+---------+-------+
+| Numbers | stars |
++---------+-------+
+|       8 |   2.0 |
+|       3 |   2.5 |
+|      11 |   3.0 |
+|       6 |   3.5 |
+|      69 |   4.0 |
+|      17 |   4.5 |
+|      23 |   5.0 |
++---------+-------+
+
+
+7. Find the top 3 users based on their total number of reviews:
+		
+	SQL code used to arrive at answer:
+
+SELECT review_count,name
+FROM user
+ORDER BY review_count DESC
+Limit 3
+		
+	Copy and Paste the Result Below:
+		
++--------------+--------+
+| review_count | name   |
++--------------+--------+
+|         2000 | Gerald |
+|         1629 | Sara   |
+|         1339 | Yuri   |
++--------------+--------+
+
+8. Does posing more reviews correlate with more fans?
+
+	Please explain your findings and interpretation of the results:
++--------------+-----------+------+
+| review_count | name      | fans |
++--------------+-----------+------+
+|          609 | Amy       |  503 |
+|          968 | Mimi      |  497 |
+|         1153 | Harald    |  311 |
+|         2000 | Gerald    |  253 |
+|          930 | Christine |  173 |
+|          813 | Lisa      |  159 |
+|          377 | Cat       |  133 |
+|         1215 | William   |  126 |
+|          862 | Fran      |  124 |
+|          834 | Lissa     |  120 |
+|          861 | Mark      |  115 |
+|          408 | Tiffany   |  111 |
+|          255 | bernice   |  105 |
+|         1039 | Roanna    |  104 |
+|          694 | Angela    |  101 |
+|         1246 | .Hon      |  101 |
+|          307 | Ben       |   96 |
+|          584 | Linda     |   89 |
+|          842 | Christina |   85 |
+|          220 | Jessica   |   84 |
+|          408 | Greg      |   81 |
+|          178 | Nieves    |   80 |
+|          754 | Sui       |   78 |
+|         1339 | Yuri      |   76 |
+|          161 | Nicole    |   73 |
++--------------+-----------+------+
+
+	
+	No, observing the review_count list along with the fans counter there are users that have acquired more fans that do not have the same large sum of reviews as others. Although more reviews can mean more exposure, it does not result in more fans for a user.
+	
+9. Are there more reviews with the word "love" or with the word "hate" in them?
+
+	Answer: There are more reviews with the word love.
+
+	
+	SQL code used to arrive at answer:
+
+SELECT COUNT(*)
+FROM review
+WHERE text LIKE "%love%"
+
++----------+
+| COUNT(*) |
++----------+
+|     1780 |
++----------+
+SELECT COUNT(*)
+FROM review
+WHERE text LIKE "%hate%"
++----------+
+| COUNT(*) |
++----------+
+|      232 |
++----------+
+	
+10. Find the top 10 users with the most fans:
+
+	SQL code used to arrive at answer:
+
+SELECT name,fans
+FROM user
+ORDER BY fans DESC
+Limit 10
+	
+	Copy and Paste the Result Below:
+
+	
++-----------+------+
+| name      | fans |
++-----------+------+
+| Amy       |  503 |
+| Mimi      |  497 |
+| Harald    |  311 |
+| Gerald    |  253 |
+| Christine |  173 |
+| Lisa      |  159 |
+| Cat       |  133 |
+| William   |  126 |
+| Fran      |  124 |
+| Lissa     |  120 |
++-----------+------+
+
+Part 2: Inferences and Analysis
+
+1. Pick one city and category of your choice and group the businesses in that city or category by their overall star rating. Compare the businesses with 2-3 stars to the businesses with 4-5 stars and answer the following questions. Include your code.
+	
+i. Do the two groups you chose to analyze have a different distribution of hours?
+Although they do open at different times they are distributed around the same time of day.
+
+ii. Do the two groups you chose to analyze have a different number of reviews?
+Yes, one has 6 while the other does have 30 reviews.         
+         
+iii. Are you able to infer anything from the location data provided between these two groups? Explain.
+The businesses have different locations since they don't share postal code.
+SQL code used for analysis:
+
+SELECT
+business.name
+, business.city
+, category.category
+, business.stars
+,hours.hours,
+business.review_count,
+business.address,
+business.postal_code
+FROM (business INNER JOIN category ON business.id = 
+category.business_id) INNER JOIN hours ON hours.business_id =
+business.id
+WHERE business.city = 'Las Vegas' AND category.category = "Food"
+GROUP BY business.stars;
+		
+		
+2. Group business based on the ones that are open and the ones that are closed. What differences can you find between the ones that are still open and the ones that are closed? List at least two differences and the SQL code you used to arrive at your answer.
+		
+i. Difference 1:
+ The business that is open has less reviews.     
+         
+ii. Difference 2:
+         
+The business that is open has longer working hours.
+         
+SQL code used for analysis:
+
+SELECT business.name, business.is_open, category.category, business.stars, hours.hours, business.review_count, business.postal_code
+FROM business 
+INNER JOIN category ON business.id =category.business_id
+INNER JOIN hours ON hours.business_id = category.business_id
+WHERE business.city = 'Las Vegas'
+GROUP BY business.is_open;
+	
+3. For this last part of your analysis, you are going to choose the type of analysis you want to conduct on the Yelp dataset and are going to prepare the data for analysis.
+
+Ideas for analysis include: Parsing out keywords and business attributes for sentiment analysis, clustering businesses to find commonalities or anomalies between them, predicting the overall star rating for a business, predicting the number of fans a user will have, and so on. These are just a few examples to get you started, so feel free to be creative and come up with your own problem you want to solve. Provide answers, in-line, to all of the following:
+	
+i. Indicate the type of analysis you chose to do:
+ Best reviewed Food businesses in datasets and relation to review count and location.       
+         
+ii. Write 1-2 brief paragraphs on the type of data you will need for your analysis and why you chose that data:
+ I decided to concentrate on the best reviewed "food" category businesses in the dataset in order to observe whether or not reviews did affect the stars each business received since these types of establishments often have reviews that alter their results in stars because of particular customer experiences. I also decided to observe whether or not locations repeated themselves in these sections to see if a city's particular food businesses had better reviews than others.                           
+                  
+iii. Output of your finished dataset:
++------------------------+----------------------------------------+-------+------------+--------------+
+| id                     | name                                   | stars | city       | review_count |
++------------------------+----------------------------------------+-------+------------+--------------+
+| 1N6_FgS6nq5eT_3x4MXm4A | Water N Ice                            |   5.0 | Phoenix    |            4 |
+| -cLMYLmmXwomTMMuDHA1Yg | Frankie Fettuccine Food Truck          |   5.0 | Oakville   |            7 |
+| 2YmDZid3sYULrT60sRjuhA | Red Apron Bakeshop                     |   5.0 | Chandler   |            5 |
+| -Eu04UHRqmGGyvYRDY8-tg | West Side Market                       |   4.5 | Cleveland  |          723 |
+| -n27mJ_jQWGCuIukTvg9Mg | Cabin Fever                            |   4.5 | Toronto    |           26 |
+| 20ib4z2Yo2wlfARFMcFwSQ | Vanilla Pastry Studio                  |   4.5 | Pittsburgh |           72 |
+| 1cLXGXThDYZ5WK_KpBLtkw | Koko Bakery                            |   4.0 | Cleveland  |          162 |
+| 0kyhbUW6NkpYjJzFBZ64vQ | The Cider Mill                         |   4.0 | Scottsdale |           91 |
+| 2xcnolaD9e6voXJnrbu_Hg | B.A. Sweetie Candy                     |   4.0 | Cleveland  |           49 |
+| 2skQeu3C36VCiB653MIfrw | Bootleggers Modern American Smokehouse |   4.0 | Phoenix    |          431 |
+| 0aKsGxx7XP2TMs_fn_9xVw | Sweet Ruby Jane Confections            |   4.0 | Las Vegas  |           30 |
+| 2NDuJhdBPAz-ovtHB8Z86A | Halo Brewery                           |   4.0 | Toronto    |           15 |
+| 27nh-2hNnNkf2dBk9aeKHQ | C's Restaurant Bakery and Coffee Shop  |   4.0 | Middleton  |           37 |
+| 0nki-StQkYNVHi5EQl-Ayw | Taqueria Y Cenaduria Culiacan          |   4.0 | Tolleson   |           23 |
+| -K4gAv8_vjx8-2BxkVeRkA | Baby Cakes                             |   3.5 | Willoughby |            5 |
+| 2YUPCtZkuoGQ4wBn8ncV_w | The Kosher Gourmet                     |   3.5 | Toronto    |            3 |
+| 1jdE-PeiQHvL8165vebWrw | Food Lion                              |   3.5 | Paw Creek  |            3 |
+| 0AJF-USLN6K5T4caooDdjw | Starbucks                              |   3.0 | Phoenix    |           52 |
+| -d9qyfNhLMQwVVg_raBKeg | What A Bagel                           |   3.0 | York       |            8 |
+| 1vBwbEnM65zyxiJZTttMJQ | Loblaws                                |   2.5 | Toronto    |           10 |
+| 0-TtzWmjREl7lIKDcmGONQ | Mango Flats                            |   2.5 | Tempe      |            5 |
+| 1q44aWEcDN7uRvA2l8xpvQ | Walgreens                              |   2.5 | Las Vegas  |            6 |
+| 22nrsY44lxUMaByDUuLSGw | Safeway Food & Drug                    |   2.5 | Phoenix    |           14 |
++------------------------+----------------------------------------+-------+------------+--------------+
+         
+         
+iv. Provide the SQL code you used to create your final dataset:
